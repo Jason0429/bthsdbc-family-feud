@@ -1,38 +1,67 @@
 .App {
-  text-align: center;
+	height: 100vh;
+	width: 100%;
+	font-family: "Raleway", sans-serif;
+	background: url("./img/db-back.jpg") 100% 100%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.game {
+	height: 600px;
+	width: 800px;
+	border-radius: 20px;
+	box-shadow: 0 0 15px 3px #00000020;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.title {
+	font-weight: 600;
+	text-align: center;
+	font-size: 2em;
+	padding: 10px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.question {
+	font-weight: 500;
+	color: blue;
+	font-size: 1.5em;
+	padding: 10px;
+	text-align: center;
+	/* border: thin solid black; */
 }
 
-.App-link {
-  color: #61dafb;
+.answer-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.answer-row {
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 30px;
+	height: 50px;
+	border: thin solid black;
+	margin: 1px;
+	width: 100%;
+	visibility: hidden;
+}
+
+.active {
+	visibility: visible;
+}
+
+.input {
+	box-sizing: border-box;
+	width: 100%;
+	margin: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+input {
+	width: 500px;
+	height: 30px;
 }
