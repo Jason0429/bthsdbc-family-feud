@@ -54,6 +54,10 @@ const PlayerTable = styled.table`
 
 		td {
 			padding: 10px;
+
+			&.selected {
+				background: #c4c4c460;
+			}
 		}
 	}
 `;
@@ -128,45 +132,188 @@ const FeudTable = styled.table`
 `;
 
 function App() {
-	// Take turns family
-	// Calculate scores
-
-	const [familyOne, setFamilyOne] = useState(data.familyOne);
-	const [familyTwo, setFamilyTwo] = useState(data.familyTwo);
+	// Question -> answers -> answer, num, isRevealed
 	const [question, setQuestion] = useState(data.questions[0]);
-	const [turn, setTurn] = useState(1);
+
+	// Family One -> members, lastTurn, score
+	const [familyOne, setFamilyOne] = useState(data.familyOne);
+
+	// Family Two -> members, lastTurn, score
+	const [familyTwo, setFamilyTwo] = useState(data.familyTwo);
+
+	// Input response
 	const [response, setResponse] = useState("");
 
-	// Updates response to input value
-	const handleChange = (e) => {
-		setResponse(e.target.value.trim());
-	};
+	// Family and Index of Member
+	const [turn, setTurn] = useState({
+		family: getCurrentFamilyTurn(),
+		member: 0
+	});
 
-	// Reveals word if correct
-	// Calls on handleTurn()
-	const handleSubmit = (e) => {
-		if (e.keyCode === 13) {
-			setQuestion((prevState) => ({
-				question: prevState.question,
-				answers: prevState.answers.map((ans) => {
-					if (ans.answer.toLowerCase() === response.toLowerCase()) {
-						return { ...ans, isRevealed: !ans.isRevealed };
-					} else {
-						handleTurn();
-						return ans;
-					}
-				})
+	// Returns boolean if value is last member
+	function isLastMember(family, value) {
+		return family === 1
+			? value === familyOne.members.length - 1
+			: value === familyTwo.members.length - 1;
+	}
+
+	// Gets next member and checks
+	function getNextMember(family) {
+		if (family === 1)
+			return familyOne.lastTurn === familyOne.members.length - 1
+				? 0
+				: familyOne.lastTurn + 1;
+		else
+			return familyTwo.lastTurn === familyTwo.members.length - 1
+				? 0
+				: familyTwo.lastTurn + 1;
+	}
+
+	// Updates response to input value
+	function handleChange(e) {
+		setResponse(e.target.value);
+	}
+
+	// Returns 1 or 2 depending on which family has a turn
+	function getCurrentFamilyTurn() {
+		let one = familyOne.members.filter((m) => m.isTurn);
+		let two = familyTwo.members.filter((m) => m.isTurn);
+		return one.length > 0 ? 1 : 2;
+	}
+
+	// Checks if response equals an answer choice
+	// Returns false if wrong or already chosen
+	function isValid() {
+		for (let i = 0; i < question.answers.length; i++) {
+			if (
+				question.answers[i].answer.toLowerCase() ===
+					response.toLowerCase() &&
+				!question.answers[i].isRevealed
+			) {
+				return question.answers[i].num;
+			}
+		}
+		return false;
+	}
+
+	// Returns a copy of members array with
+	// previous member isTurn disabled and
+	// next member isTurn enabled
+	function getSameFamilyAndModifyNextMember(family, nextTurn, score) {
+		if (family === 1) {
+			let copy = [...familyOne.members];
+			copy[familyOne.lastTurn].isTurn = false;
+			copy[nextTurn].isTurn = true;
+
+			setFamilyOne((prevState) => ({
+				...prevState,
+				lastTurn: nextTurn,
+				score: prevState.score + score,
+				members: [...copy]
 			}));
+		} else {
+			let copy = [...familyTwo.members];
+			copy[familyTwo.lastTurn].isTurn = false;
+			copy[nextTurn].isTurn = true;
+
+			setFamilyTwo((prevState) => ({
+				...prevState,
+				lastTurn: nextTurn,
+				score: prevState.score + score,
+				members: [...copy]
+			}));
+		}
+	}
+
+	function switchFamilyAndModifyNextMember(family) {
+		if (family === 1) {
+			setFamilyOne((prevState) => ({
+				...prevState,
+				members: prevState.members.map((m) => ({ ...m, isTurn: false }))
+			}));
+
+			let copy = [...familyTwo.members];
+			copy[getNextMember(2)].isTurn = true;
+
+			setFamilyTwo((prevState) => ({
+				...prevState,
+				lastTurn: getNextMember(2),
+				members: [...copy]
+			}));
+		} else {
+			setFamilyTwo((prevState) => ({
+				...prevState,
+				members: prevState.members.map((m) => ({ ...m, isTurn: false }))
+			}));
+
+			let copy = [...familyOne.members];
+			copy[getNextMember(1)].isTurn = true;
+
+			setFamilyOne((prevState) => ({
+				...prevState,
+				lastTurn: getNextMember(1),
+				members: [...copy]
+			}));
+		}
+	}
+
+	// When user enters response
+	function handleSubmit(e) {
+		if (e.keyCode === 13) {
+			let scoreOrFalse = isValid(); // Returns score if true, else false
+
+			// If response is an answer choice
+			if (scoreOrFalse !== false) {
+				// Reveal answer choice
+				setQuestion(
+					(prevState) => ({
+						...prevState,
+						answers: prevState.answers.map((ans) =>
+							ans.answer.toLowerCase() === response.toLowerCase()
+								? { ...ans, isRevealed: true }
+								: ans
+						)
+					}),
+					// Set next turn
+					// Keep same family
+					// Increment member index
+					setTurn(
+						(prevState) => ({
+							...prevState,
+							member: getNextMember(prevState.family)
+						}),
+						getSameFamilyAndModifyNextMember(
+							turn.family,
+							getNextMember(turn.family),
+							scoreOrFalse
+						)
+					)
+				);
+			} else {
+				// If wrong
+				// Change families
+				// Modify member to lastTurn + 1
+				setTurn(
+					(prevState) => ({
+						family: prevState.family === 1 ? 2 : 1,
+						member:
+							prevState.family === 1
+								? getNextMember(2)
+								: getNextMember(1)
+					}),
+					switchFamilyAndModifyNextMember(
+						// Pass 1 to disable 1 and enable 2
+						// Pass 2 to disable 2 and enable 1
+						turn.family
+					)
+				);
+			}
 
 			setResponse("");
 		}
-	};
+	}
 
-	// Switches family turn
-	const handleTurn = () => {
-		setTurn((prevState) => (prevState === 1 ? 2 : 1));
-	};
-
+	// Separate function to modify next member turn and return object
 	return (
 		<Game className="App">
 			<Banner>
@@ -178,13 +325,17 @@ function App() {
 					<th>Family One - {familyOne.score}</th>
 					{familyOne.members.map((member) => (
 						<tr>
-							<td>{member}</td>
+							<td className={member.isTurn ? "selected" : ""}>
+								{member.name}
+							</td>
 						</tr>
 					))}
 					<th>Family Two - {familyTwo.score}</th>
 					{familyTwo.members.map((member) => (
 						<tr>
-							<td>{member}</td>
+							<td className={member.isTurn ? "selected" : ""}>
+								{member.name}
+							</td>
 						</tr>
 					))}
 				</PlayerTable>

@@ -1,11 +1,55 @@
 export const data = {
 	familyOne: {
-		members: ["Student", "Student", "Student", "Student", "Student"],
-		score: 0
+		members: [
+			{
+				name: "Student",
+				isTurn: true
+			},
+			{
+				name: "Student",
+				isTurn: false
+			},
+			{
+				name: "Student",
+				isTurn: false
+			},
+			{
+				name: "Student",
+				isTurn: false
+			},
+			{
+				name: "Student",
+				isTurn: false
+			}
+		],
+		score: 0,
+		lastTurn: 0
 	},
 	familyTwo: {
-		members: ["Student", "Student", "Student", "Student", "Student"],
-		score: 0
+		members: [
+			{
+				name: "Student",
+				isTurn: false
+			},
+			{
+				name: "Student",
+				isTurn: false
+			},
+			{
+				name: "Student",
+				isTurn: false
+			},
+			{
+				name: "Student",
+				isTurn: false
+			},
+			{
+				name: "Student",
+				isTurn: false
+			}
+		],
+		score: 0,
+		lastTurn: 0
 	},
 	questions: [
 		{
