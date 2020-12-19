@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/bthsdbc-family-feud/static/css/main.b89e4cc2.chunk.css",
+    "main.js": "/bthsdbc-family-feud/static/js/main.8726c930.chunk.js",
+    "main.js.map": "/bthsdbc-family-feud/static/js/main.8726c930.chunk.js.map",
+    "runtime-main.js": "/bthsdbc-family-feud/static/js/runtime-main.6ac445fa.js",
+    "runtime-main.js.map": "/bthsdbc-family-feud/static/js/runtime-main.6ac445fa.js.map",
+    "static/js/2.7037fdaf.chunk.js": "/bthsdbc-family-feud/static/js/2.7037fdaf.chunk.js",
+    "static/js/2.7037fdaf.chunk.js.map": "/bthsdbc-family-feud/static/js/2.7037fdaf.chunk.js.map",
+    "static/js/3.dc03dd2b.chunk.js": "/bthsdbc-family-feud/static/js/3.dc03dd2b.chunk.js",
+    "static/js/3.dc03dd2b.chunk.js.map": "/bthsdbc-family-feud/static/js/3.dc03dd2b.chunk.js.map",
+    "index.html": "/bthsdbc-family-feud/index.html",
+    "static/css/main.b89e4cc2.chunk.css.map": "/bthsdbc-family-feud/static/css/main.b89e4cc2.chunk.css.map",
+    "static/js/2.7037fdaf.chunk.js.LICENSE.txt": "/bthsdbc-family-feud/static/js/2.7037fdaf.chunk.js.LICENSE.txt",
+    "static/media/App.css": "/bthsdbc-family-feud/static/media/cartoon-db.45d9dd94.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6ac445fa.js",
+    "static/js/2.7037fdaf.chunk.js",
+    "static/css/main.b89e4cc2.chunk.css",
+    "static/js/main.8726c930.chunk.js"
+  ]
+}
