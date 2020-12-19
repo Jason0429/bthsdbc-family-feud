@@ -2,7 +2,23 @@
 	height: 100vh;
 	width: 100%;
 	font-family: "Raleway", sans-serif;
-	background: url("./img/db-back.jpg") 100% 100%;
+	/* background: ; */
+	background-size: contain;
+	background-position: center center;
+	background-repeat: repeat-x;
+	animation: paddle 10s ease-in-out infinite;
+	background-color: #bd4f6c;
+	background-image: url("./img/cartoon-db.png"),
+		linear-gradient(326deg, #d7816a 74%, #bd4f6c 0%, #d7816a 74%);
+}
+
+@keyframes paddle {
+	from {
+		background-position-x: 0px;
+	}
+	to {
+		background-position-x: -100vw;
+	}
 }
 
 .game {
@@ -64,4 +80,23 @@
 input {
 	width: 500px;
 	height: 30px;
+}
+
+#wave {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	height: 20%;
+	z-index: 10;
+}
+
+#background-img {
+	height: 100vh;
+	width: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	object-position: bottom;
+	object-fit: contain;
+	animation: paddle 10s linear infinite;
 }

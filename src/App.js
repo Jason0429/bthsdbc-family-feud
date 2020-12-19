@@ -2,15 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import { data } from "./data/data.js";
 import ohana from "./img/ohana.jpg";
+import cartoon from "./img/cartoon-db.png";
 import { useState } from "react";
 import "./App.css";
+import Wave from "react-wavify";
 
 const Game = styled.div`
 	display: flex;
 	width: 100%;
 	height: 100vh;
-	/* align-items: center; */
-	/* justify-content: space-between; */
 `;
 
 const Banner = styled.div`
@@ -20,8 +20,8 @@ const Banner = styled.div`
 	display: flex;
 	align-items: center;
 	width: 100%;
-	height: 150px;
-	justify-content: center;
+	height: 100px;
+	padding: 0 50px;
 
 	font-weight: 600;
 	font-size: 1.3em;
@@ -39,9 +39,9 @@ const PlayerTable = styled.table`
 	width: 90%;
 	min-width: 200px;
 	border-radius: 15px;
-	background: #fff;
-	box-shadow: 0 0 15px 3px #00000020;
+	background: #ffffff;
 	flex: 0.5;
+	z-index: 100;
 
 	th {
 		padding: 10px;
@@ -54,9 +54,12 @@ const PlayerTable = styled.table`
 
 		td {
 			padding: 10px;
+			border-radius: 15px;
 
 			&.selected {
-				background: #c4c4c460;
+				background: #fff;
+				color: #000;
+				box-shadow: 0 0 15px 3px #00000020;
 			}
 		}
 	}
@@ -80,8 +83,9 @@ const FeudTable = styled.table`
 	width: 80%;
 	min-width: 500px;
 	border-radius: 15px;
-	background: #00000090;
+	background: #00000099;
 	padding: 30px;
+	z-index: 100;
 	color: #fff;
 
 	th {
@@ -93,7 +97,6 @@ const FeudTable = styled.table`
 	tr {
 		width: 100%;
 		align-items: center;
-		border-bottom: 1px solid lightgray;
 
 		td {
 			font-size: 1.3em;
@@ -101,7 +104,7 @@ const FeudTable = styled.table`
 			align-items: center;
 			justify-content: space-between;
 			padding: 20px;
-			border-bottom: 1px solid #c4c4c420;
+			border-bottom: 1px solid lightgray;
 			visibility: hidden;
 
 			&.reveal {
@@ -110,11 +113,13 @@ const FeudTable = styled.table`
 		}
 
 		input {
+			background: transparent;
+			border: none;
+			border-bottom: thin solid #fff;
 			width: calc(100% - 5px);
 			padding: 10px;
 			font-size: 1.2em;
-			border-radius: 15px;
-			border: none;
+			color: #fff;
 
 			&:focus {
 				outline: none;
@@ -133,7 +138,7 @@ const FeudTable = styled.table`
 
 function App() {
 	// Question -> answers -> answer, num, isRevealed
-	const [question, setQuestion] = useState(data.questions[0]);
+	const [question, setQuestion] = useState(data.questions[getRandomIndex()]);
 
 	// Family One -> members, lastTurn, score
 	const [familyOne, setFamilyOne] = useState(data.familyOne);
@@ -150,11 +155,10 @@ function App() {
 		member: 0
 	});
 
-	// Returns boolean if value is last member
-	function isLastMember(family, value) {
-		return family === 1
-			? value === familyOne.members.length - 1
-			: value === familyTwo.members.length - 1;
+	// Return random index of questions array
+	function getRandomIndex() {
+		let max = data.questions.length - 1;
+		return Math.floor(Math.random() * (max + 1));
 	}
 
 	// Gets next member and checks
@@ -316,6 +320,18 @@ function App() {
 	// Separate function to modify next member turn and return object
 	return (
 		<Game className="App">
+			{/* <img src={cartoon} id="background-img" /> */}
+			<Wave
+				id="wave"
+				fill="#345F6E"
+				paused={false}
+				options={{
+					height: 20,
+					amplitude: 30,
+					speed: 0.5,
+					points: 3
+				}}
+			/>
 			<Banner>
 				<img src={ohana} alt="Ohana" />
 				&nbsp;&nbsp;BTHS Family Feud
